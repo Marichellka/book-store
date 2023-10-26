@@ -9,6 +9,7 @@ public enum OrderState
 
 public class Order: BaseModel
 {
+    public int UserId { get; set; }
     public User User { get; set; }
     public string Address { get; set; }
     public IEnumerable<OrderItem> OrderItems { get; set; }

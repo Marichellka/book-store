@@ -2,7 +2,7 @@
 
 public class Cart: BaseModel
 {
-    public User User { get; set; }
-    public IEnumerable<CartItem> CartItems { get; set; }
+    public virtual User User { get; set; }
+    public virtual IEnumerable<CartItem> CartItems { get; set; }
     public float TotalPrice { get; set; }
 }

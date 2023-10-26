@@ -3,5 +3,5 @@
 public class Category: BaseModel
 {
     public string Name { get; set; }
-    public IEnumerable<BookCategory> BookCategories { get; set; }
+    public virtual IEnumerable<BookCategory> BookCategories { get; set; }
 }

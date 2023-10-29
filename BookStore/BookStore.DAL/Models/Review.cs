@@ -1,4 +1,6 @@
-﻿namespace BookStore.DAL.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BookStore.DAL.Models;
 
 public class Review: BaseModel
 {
@@ -6,6 +8,7 @@ public class Review: BaseModel
     public virtual User User { get; set; }
     public int BookId { get; set; }
     public virtual Book Book { get; set; }
+    [Range(1, 5)]
     public float Rating { get; set; }
-    public string TextReview { get; set; }
+    public string? TextReview { get; set; }
 }

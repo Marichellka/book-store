@@ -79,7 +79,7 @@ public class AppDbContext: DbContext
         builder.Entity<User>()
             .HasOne(u => u.Cart)
             .WithOne(c => c.User)
-            .HasForeignKey<Cart>(c => c.Id)
+            .HasForeignKey<Cart>(c => c.UserId)
             .IsRequired();
 
         builder.Entity<CartItem>()
@@ -94,5 +94,4 @@ public class AppDbContext: DbContext
             .HasForeignKey(ci => ci.Cart)
             .IsRequired();
     }
-
 }

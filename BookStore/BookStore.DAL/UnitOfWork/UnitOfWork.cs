@@ -23,17 +23,17 @@ public class UnitOfWork: IUnitOfWork
     public UnitOfWork(AppDbContext context)
     {
         _context = context;
-        UserRepository = new Repository<User>(_context);
-        BookRepository = new Repository<Book>(_context);
-        AuthorRepository = new Repository<Author>(_context);
-        PublisherRepository = new Repository<Publisher>(_context);
-        CategoryRepository = new Repository<Category>(_context);
-        BookCategoryRepository = new Repository<BookCategory>(_context);
-        ReviewRepository = new Repository<Review>(_context);
-        OrderRepository = new Repository<Order>(_context);
-        OrderItemRepository = new Repository<OrderItem>(_context);
-        CartRepository = new Repository<Cart>(_context);
-        CartItemRepository = new Repository<CartItem>(_context);
+        UserRepository = new GenericRepository<User>(_context);
+        BookRepository = new GenericRepository<Book>(_context);
+        AuthorRepository = new GenericRepository<Author>(_context);
+        PublisherRepository = new GenericRepository<Publisher>(_context);
+        CategoryRepository = new GenericRepository<Category>(_context);
+        BookCategoryRepository = new GenericRepository<BookCategory>(_context);
+        ReviewRepository = new GenericRepository<Review>(_context);
+        OrderRepository = new GenericRepository<Order>(_context);
+        OrderItemRepository = new GenericRepository<OrderItem>(_context);
+        CartRepository = new GenericRepository<Cart>(_context);
+        CartItemRepository = new GenericRepository<CartItem>(_context);
     }
 
     public Task<int> SaveChangesAsync()

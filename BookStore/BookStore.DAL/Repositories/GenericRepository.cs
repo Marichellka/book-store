@@ -1,21 +1,27 @@
-﻿using BookStore.DAL.Contexts;
+﻿using System.Linq.Expressions;
+using BookStore.DAL.Contexts;
 using BookStore.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.DAL.Repositories;
 
-public class Repository<TModel>: IRepository<TModel> where TModel : BaseModel
+public class GenericRepository<TModel>: IRepository<TModel> where TModel : BaseModel
 {
     private readonly AppDbContext _context;
 
-    public Repository(AppDbContext context)
+    public GenericRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public Task<List<TModel>> GetAll()
+    public Task<List<TModel>> GetAll(Expression<Func<TModel, bool>>? filter = null)
     {
-        return _context.Set<TModel>().ToListAsync();
+        IQueryable<TModel> query = _context.Set<TModel>();
+        if (filter != null)
+        {
+            query.Where(filter);
+        }
+        return query.ToListAsync();
     }
 
     public Task<TModel?> GetById(int id)

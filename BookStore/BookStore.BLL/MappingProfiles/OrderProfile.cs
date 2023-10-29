@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookStore.BLL.DTOs.Cart;
 using BookStore.BLL.DTOs.Order;
 using BookStore.DAL.Models;
 
@@ -11,5 +12,7 @@ public class OrderProfile : Profile
         CreateMap<Order, OrderDto>();
         CreateMap<NewOrderDto, Order>();
         CreateMap<NewOrderDto, OrderDto>();
+        CreateMap<OrderItem, OrderItemDto>();
+        CreateMap<CartItemDto, OrderItemDto>();
     }
 }

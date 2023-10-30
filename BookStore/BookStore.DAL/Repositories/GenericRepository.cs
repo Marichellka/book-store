@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-using BookStore.DAL.Contexts;
+﻿using BookStore.DAL.Contexts;
 using BookStore.DAL.Models;
+using BookStore.DAL.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.DAL.Repositories;
@@ -14,12 +14,12 @@ public class GenericRepository<TModel>: IRepository<TModel> where TModel : BaseM
         _context = context;
     }
 
-    public Task<List<TModel>> GetAll(Expression<Func<TModel, bool>>? filter = null)
+    public Task<List<TModel>> GetAll(ISpecification<TModel>? specification = null)
     {
         IQueryable<TModel> query = _context.Set<TModel>();
-        if (filter != null)
+        if (specification != null)
         {
-            query.Where(filter);
+            query.Where(specification.SpecificationExpression);
         }
         return query.ToListAsync();
     }

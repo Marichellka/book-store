@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using BookStore.BLL.DTOs.Book;
 using BookStore.BLL.DTOs.Cart;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
+using BookStore.DAL.Specifications;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -19,9 +19,9 @@ public class CartService: BaseService
         return Mapper.Map<ICollection<CartDto>>(carts);
     }
 
-    public async Task<ICollection<CartItemDto>> GetAllCartItems(int cartId)
+    public async Task<ICollection<CartItemDto>> GetAllCartItems(ISpecification<CartItem>? specification= null)
     {
-        var items = await UnitOfWork.CartItemRepository.GetAll(item => item.CartId == cartId);
+        var items = await UnitOfWork.CartItemRepository.GetAll(specification);
 
         return Mapper.Map<ICollection<CartItemDto>>(items);
     }

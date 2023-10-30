@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using BookStore.BLL.DTOs.Book;
 using BookStore.BLL.DTOs.Review;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
+using BookStore.DAL.Specifications;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -13,24 +13,10 @@ public class ReviewService: BaseService
     {
     }
     
-    public async Task<ICollection<ReviewDto>> GetAll()
+    public async Task<ICollection<ReviewDto>> GetAll(ISpecification<Review>? specification = null)
     {
-        var reviews = await UnitOfWork.ReviewRepository.GetAll();
+        var reviews = await UnitOfWork.ReviewRepository.GetAll(specification);
         return Mapper.Map<ICollection<ReviewDto>>(reviews);
-    }
-
-    public async Task<ICollection<BookDto>> GetAllBooksReview(int bookId)
-    {
-        var reviews = await UnitOfWork.ReviewRepository.GetAll(review => review.BookId == bookId);
-
-        return Mapper.Map<ICollection<BookDto>>(reviews);
-    }
-    
-    public async Task<ICollection<BookDto>> GetAllUsersReview(int userId)
-    {
-        var reviews = await UnitOfWork.ReviewRepository.GetAll(review => review.UserId == userId);
-
-        return Mapper.Map<ICollection<BookDto>>(reviews);
     }
 
     public async Task<ReviewDto> GetById(int id)

@@ -19,13 +19,6 @@ public class AuthorService: BaseService
         return Mapper.Map<ICollection<AuthorDto>>(authors);
     }
 
-    public async Task<ICollection<BookDto>> GetAuthorBooks(int authorId)
-    {
-        var books = await UnitOfWork.BookRepository.GetAll(book => book.AuthorId == authorId);
-
-        return Mapper.Map<ICollection<BookDto>>(books);
-    }
-
     public async Task<AuthorDto> GetById(int id)
     {
         var author = await UnitOfWork.AuthorRepository.GetById(id) ??

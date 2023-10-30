@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using BookStore.BLL.DTOs.Cart;
 using BookStore.BLL.DTOs.Order;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
+using BookStore.DAL.Specifications;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -13,16 +13,15 @@ public class OrderService: BaseService
     {
     }
     
-     public async Task<ICollection<OrderDto>> GetAll()
+     public async Task<ICollection<OrderDto>> GetAll(ISpecification<Order>? specification = null)
     {
-        var orders = await UnitOfWork.OrderRepository.GetAll();
+        var orders = await UnitOfWork.OrderRepository.GetAll(specification);
         return Mapper.Map<ICollection<OrderDto>>(orders);
     }
 
-    public async Task<ICollection<OrderItemDto>> GetAllOrderItems(int orderId)
+    public async Task<ICollection<OrderItemDto>> GetAllOrderItems(ISpecification<OrderItem>? specification = null)
     {
-        var items = await UnitOfWork.OrderItemRepository.GetAll(item => item.OrderId == orderId);
-
+        var items = await UnitOfWork.OrderItemRepository.GetAll(specification);
         return Mapper.Map<ICollection<OrderItemDto>>(items);
     }
 

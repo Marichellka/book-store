@@ -91,7 +91,7 @@ public class AppDbContext: DbContext
         builder.Entity<CartItem>()
             .HasOne(ci => ci.Cart)
             .WithMany(c => c.CartItems)
-            .HasForeignKey(ci => ci.Cart)
+            .HasForeignKey(ci => ci.CartId)
             .IsRequired();
     }
 }

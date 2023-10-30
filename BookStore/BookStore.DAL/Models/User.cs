@@ -12,5 +12,5 @@ public class User: BaseModel
     public string PasswordHash { get; set; } 
     public virtual IEnumerable<Review>? Reviews { get; set; }
     public virtual IEnumerable<Order>? Orders { get; set; }
-    public virtual Cart Cart { get; set; }
+    public virtual Cart? Cart { get; set; }
 }

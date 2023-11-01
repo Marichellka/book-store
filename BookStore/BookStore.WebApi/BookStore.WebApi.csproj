@@ -10,4 +10,10 @@
       <ProjectReference Include="..\BookStore.BLL\BookStore.BLL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+      <PackageReference Include="Microsoft.OpenApi" Version="1.6.10" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
 </Project>

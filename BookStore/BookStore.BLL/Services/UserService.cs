@@ -32,9 +32,6 @@ public class UserService: BaseService
         var userEntity = Mapper.Map<User>(user);
         await UnitOfWork.UserRepository.Add(userEntity);
 
-        // var cartDto = new NewCartDto() { UserId = userEntity.Id };
-        // await UnitOfWork.CartRepository.Add(Mapper.Map<Cart>(cartDto));
-        
         await UnitOfWork.SaveChangesAsync();
 
         return Mapper.Map<UserDto>(userEntity);

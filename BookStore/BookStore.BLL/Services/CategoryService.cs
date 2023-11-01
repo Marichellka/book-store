@@ -3,6 +3,7 @@ using BookStore.BLL.DTOs.Book;
 using BookStore.BLL.DTOs.Category;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
+using BookStore.DAL.Specifications;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -13,9 +14,9 @@ public class CategoryService: BaseService
     {
     }
     
-    public async Task<ICollection<CategoryDto>> GetAll()
+    public async Task<ICollection<CategoryDto>> GetAll(ISpecification<Category>? specification = null)
     {
-        var categories = await UnitOfWork.CategoryRepository.GetAll();
+        var categories = await UnitOfWork.CategoryRepository.GetAll(specification);
         return Mapper.Map<ICollection<CategoryDto>>(categories);
     }
 

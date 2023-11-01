@@ -52,7 +52,6 @@ public class OrderService: BaseService
         {
             var book = await UnitOfWork.BookRepository.GetById(item.BookId) ??
                        throw new NotFoundException(nameof(Book), item.BookId);
-            book.CountAvailable -= item.Count;
             await UnitOfWork.BookRepository.Update(book);
             
             item.OrderId = orderEntity.Id;

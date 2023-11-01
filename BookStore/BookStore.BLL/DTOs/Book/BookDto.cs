@@ -6,7 +6,6 @@ public class BookDto: BaseDto
     public int AuthorId { get; set; }
     public DateTime PublishDate { get; set; }
     public int PublisherId { get; set; }
-    public int CountAvailable { get; set; }
     public float Price { get; set; }
     public float TotalRating { get; set; }
     

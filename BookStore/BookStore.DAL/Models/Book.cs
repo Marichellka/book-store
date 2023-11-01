@@ -11,8 +11,6 @@ public class Book: BaseModel
     public int PublisherId { get; set; }
     public virtual Publisher Publisher { get; set; }
     [Range(0, Int32.MaxValue)]
-    public int CountAvailable { get; set; }
-    [Range(0, Int32.MaxValue)]
     public float Price { get; set; }
     public virtual IEnumerable<Review>? Reviews { get; set; }
     public float TotalRating { get; set; }

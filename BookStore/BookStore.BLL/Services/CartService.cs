@@ -46,15 +46,16 @@ public class CartService: BaseService
         return Mapper.Map<CartDto>(cartEntity);
     }
 
-    public async Task<CartItemDto> AddCartItem(NewCartItemDto newCartItem)
+    public async Task<CartItemDto> AddCartItem(int cartId, NewCartItemDto newCartItem)
     {
-        var cart = await UnitOfWork.CartRepository.GetById(newCartItem.CartId) ?? 
-                   throw new NotFoundException(nameof(Cart), newCartItem.CartId);
+        var cart = await UnitOfWork.CartRepository.GetById(cartId) ?? 
+                   throw new NotFoundException(nameof(Cart), cartId);
         
         var book = await UnitOfWork.BookRepository.GetById(newCartItem.BookId) ?? 
                    throw new NotFoundException(nameof(Book), newCartItem.BookId);
 
         var cartItem = Mapper.Map<CartItem>(newCartItem);
+        cartItem.CartId = cartId;
         cartItem.Price = book.Price * newCartItem.Count;
 
         cart.TotalPrice += cartItem.Price;
@@ -66,38 +67,41 @@ public class CartService: BaseService
         return Mapper.Map<CartItemDto>(cartItem);
     }
     
-    public async Task<CartItemDto> UpdateCartItem(CartItemDto cartItemDto)
+    public async Task<CartItemDto> UpdateCartItem(int cartId, int cartItemId, NewCartItemDto cartItemDto)
     {
-        if (await UnitOfWork.BookRepository.GetById(cartItemDto.BookId) is null)
+        var book = await UnitOfWork.BookRepository.GetById(cartItemDto.BookId) ??
             throw new NotFoundException(nameof(Book), cartItemDto.BookId);
 
-        var cart = await UnitOfWork.CartRepository.GetById(cartItemDto.CartId) ?? 
-                   throw new NotFoundException(nameof(Cart), cartItemDto.CartId);
+        var cart = await UnitOfWork.CartRepository.GetById(cartId) ?? 
+                   throw new NotFoundException(nameof(Cart), cartId);
         
-        var cartItem = await UnitOfWork.CartItemRepository.GetById(cartItemDto.Id) ??
-                       throw new NotFoundException(nameof(CartItem), cartItemDto.Id);
+        var cartItem = await UnitOfWork.CartItemRepository.GetById(cartItemId) ??
+                       throw new NotFoundException(nameof(CartItem), cartItemId);
 
         cart.TotalPrice -= cartItem.Price;
-        cart.TotalPrice += cartItemDto.Price;
+        cart.TotalPrice += cartItemDto.Count*book.Price;
         
         await UnitOfWork.CartItemRepository.Update(Mapper.Map<CartItem>(cartItemDto));
         await UnitOfWork.CartRepository.Update(cart);
         await UnitOfWork.SaveChangesAsync();
 
-        return cartItemDto;
+        return Mapper.Map<CartItemDto>(cartItem);
     }
 
-    public async Task DeleteCartItem(CartItemDto cartItemDto)
+    public async Task DeleteCartItem(int cartId, int cartItemId)
     {
-        var cart = await UnitOfWork.CartRepository.GetById(cartItemDto.CartId) ?? 
-                   throw new NotFoundException(nameof(Cart), cartItemDto.CartId);
+        var cart = await UnitOfWork.CartRepository.GetById(cartId) ?? 
+                   throw new NotFoundException(nameof(Cart), cartId);
+
+        var item = await UnitOfWork.CartItemRepository.GetById(cartItemId) ??
+                   throw new NotFoundException(nameof(cartItemId), cartItemId);
         
-        if (await UnitOfWork.BookRepository.GetById(cartItemDto.BookId) is null)
-            throw new NotFoundException(nameof(Book), cartItemDto.BookId);
+        if (await UnitOfWork.BookRepository.GetById(item.BookId) is null)
+            throw new NotFoundException(nameof(Book), item.BookId);
         
-        cart.TotalPrice -= cartItemDto.Price;
+        cart.TotalPrice -= item.Price;
         
-        await UnitOfWork.CartItemRepository.Delete(Mapper.Map<CartItem>(cartItemDto));
+        await UnitOfWork.CartItemRepository.Delete(Mapper.Map<CartItem>(item));
         await UnitOfWork.CartRepository.Update(cart);
         await UnitOfWork.SaveChangesAsync();
     }
@@ -109,6 +113,15 @@ public class CartService: BaseService
 
         cart.CartItems = null;
         await UnitOfWork.CartRepository.Update(cart);
+        await UnitOfWork.SaveChangesAsync();
+    }
+    
+    public async Task Delete(int id)
+    {
+        var cart = await UnitOfWork.CartRepository.GetById(id) ??
+                   throw new NotFoundException(nameof(Cart), id);
+
+        await UnitOfWork.CartRepository.Delete(cart);
         await UnitOfWork.SaveChangesAsync();
     }
 }

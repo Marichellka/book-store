@@ -75,7 +75,6 @@ namespace BookStore.DAL.Migrations
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     PublishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PublisherId = table.Column<int>(type: "int", nullable: false),
-                    CountAvailable = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     TotalRating = table.Column<float>(type: "real", nullable: false)
                 },

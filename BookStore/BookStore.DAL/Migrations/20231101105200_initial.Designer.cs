@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231030201719_initial")]
+    [Migration("20231101105200_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -52,9 +52,6 @@ namespace BookStore.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CountAvailable")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

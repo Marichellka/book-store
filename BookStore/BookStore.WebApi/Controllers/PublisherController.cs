@@ -1,4 +1,5 @@
-﻿using BookStore.BLL.DTOs.Publisher;
+﻿using BookStore.BLL.DTOs.Book;
+using BookStore.BLL.DTOs.Publisher;
 using BookStore.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,12 @@ public class PublisherController: ControllerBase
     public async Task<ActionResult<PublisherDto>> GetById(int id)
     {
         return Ok(await _publisherService.GetById(id));
+    }
+    
+    [HttpGet("{id}/books")]
+    public async Task<ActionResult<ICollection<BookDto>>> GetBooks(int id)
+    {
+        return Ok(await _publisherService.GetBooks(id));
     }
 
     [HttpPost]

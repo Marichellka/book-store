@@ -19,15 +19,9 @@ public class CategoryController: ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<ICollection<CategoryDto>>> Get([FromQuery] int? bookId)
+    public async Task<ActionResult<ICollection<CategoryDto>>> Get()
     {
-        ISpecification<Category>? specification = null;
-        if (bookId != null)
-        {
-            specification = new BookCategoriesSpecification(bookId.Value);
-        }
-        
-        return Ok(await _categoryService.GetAll(specification));
+        return Ok(await _categoryService.GetAll());
     }
 
     [HttpGet("{id}")]

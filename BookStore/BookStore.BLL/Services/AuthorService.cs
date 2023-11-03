@@ -3,6 +3,7 @@ using BookStore.BLL.DTOs.Author;
 using BookStore.BLL.DTOs.Book;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
+using BookStore.DAL.Specifications.Books;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -17,6 +18,16 @@ public class AuthorService: BaseService
     {
         var authors = await UnitOfWork.AuthorRepository.GetAll();
         return Mapper.Map<ICollection<AuthorDto>>(authors);
+    }
+    
+    public async Task<ICollection<BookDto>> GetBooks(int id)
+    {
+        if(await UnitOfWork.AuthorRepository.GetById(id) is null) 
+            throw new NotFoundException(nameof(Author), id);
+        
+        var books = await UnitOfWork.BookRepository.GetAll(new AuthorBooksSpecification(id));
+        
+        return Mapper.Map<ICollection<BookDto>>(books);
     }
 
     public async Task<AuthorDto> GetById(int id)

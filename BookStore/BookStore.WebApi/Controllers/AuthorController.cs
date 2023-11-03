@@ -1,4 +1,5 @@
 ﻿using BookStore.BLL.DTOs.Author;
+using BookStore.BLL.DTOs.Book;
 using BookStore.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,12 @@ public class AuthorController: ControllerBase
     public async Task<ActionResult<AuthorDto>> GetById(int id)
     {
         return Ok(await _authorService.GetById(id));
+    }
+    
+    [HttpGet("{id}/books")]
+    public async Task<ActionResult<ICollection<BookDto>>> GetBooks(int id)
+    {
+        return Ok(await _authorService.GetBooks(id));
     }
 
     [HttpPost]

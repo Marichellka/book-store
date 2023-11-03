@@ -1,4 +1,5 @@
 ﻿using BookStore.BLL.DTOs.Book;
+using BookStore.BLL.DTOs.Category;
 using BookStore.BLL.Services;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications;
@@ -46,11 +47,23 @@ public class BookController: ControllerBase
     {
         return Ok(await _bookService.GetById(id));
     }
+    
+    [HttpGet("{id}/categories")]
+    public async Task<ActionResult<BookDto>> GetBookCategories(int id)
+    {
+        return Ok(await _bookService.GetCategories(id));
+    }
 
     [HttpPost]
     public async Task<ActionResult<BookDto>> Create([FromBody] NewBookDto book)
     {
         return Ok(await _bookService.Create(book));
+    }
+    
+    [HttpPost("{id}/categories")]
+    public async Task<IActionResult> AddCategory(int bookId, [FromBody] CategoryDto category)
+    {
+        return Ok(await _bookService.AddCategory(bookId, category));
     }
 
     [HttpPut]
@@ -63,6 +76,13 @@ public class BookController: ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         await _bookService.Delete(id);
+        return NoContent();
+    }
+    
+    [HttpDelete("{bookId}/categories/{categoryId}")]
+    public async Task<IActionResult> DeleteCategory(int bookId, int categoryId)
+    {
+        await _bookService.DeleteCategory(bookId, categoryId);
         return NoContent();
     }
 }

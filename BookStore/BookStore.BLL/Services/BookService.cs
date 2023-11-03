@@ -4,6 +4,7 @@ using BookStore.BLL.DTOs.Category;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications;
+using BookStore.DAL.Specifications.Books;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -26,6 +27,16 @@ public class BookService: BaseService
                    throw new NotFoundException(nameof(Book), id);
 
         return Mapper.Map<BookDto>(book);
+    }
+    
+    public async Task<ICollection<CategoryDto>> GetCategories(int bookId)
+    {
+        var book = await UnitOfWork.BookRepository.GetById(bookId) ??
+                   throw new NotFoundException(nameof(Book), bookId);
+        BookCategoriesSpecification specification = new(bookId);
+
+        var categories = await UnitOfWork.CategoryRepository.GetAll(specification);
+        return Mapper.Map<ICollection<CategoryDto>>(categories);
     }
     
     public async Task<BookDto> Create(NewBookDto book)
@@ -54,13 +65,21 @@ public class BookService: BaseService
         return updatedBook;
     }
 
-    // public async Task<BookDto> AddBookCategories(BookDto book, ICollection<CategoryDto> categories)
-    // {
-    //     var bookEntity = await UnitOfWork.BookRepository.GetById(book.Id) ??
-    //                throw new NotFoundException(nameof(Book), book.Id);
-    //     
-    //     
-    // }
+    public async Task<BookDto> AddCategory(int bookId, CategoryDto category)
+    {
+        var bookEntity = await UnitOfWork.BookRepository.GetById(bookId) ??
+                   throw new NotFoundException(nameof(Book), bookId);
+
+        var categoryEntity = await UnitOfWork.CategoryRepository.GetById(category.Id) ??
+                                 throw new NotFoundException(nameof(Category), category.Id);
+            
+        BookCategory bookCategoryEntity = new (){BookId = bookEntity.Id, CategoryId = categoryEntity.Id}; 
+        
+        await UnitOfWork.BookCategoryRepository.Add(bookCategoryEntity);
+        await UnitOfWork.SaveChangesAsync();
+        
+        return Mapper.Map<BookDto>(bookEntity);
+    }
 
     public async Task Delete(int id)
     {
@@ -69,5 +88,22 @@ public class BookService: BaseService
 
         await UnitOfWork.BookRepository.Delete(book);
         await UnitOfWork.SaveChangesAsync();
+    }
+    
+    public async Task DeleteCategory(int bookId, int categoryId)
+    {
+        var book = await UnitOfWork.BookRepository.GetById(bookId) ??
+                   throw new NotFoundException(nameof(Book), bookId);
+
+        var category = await UnitOfWork.CategoryRepository.GetById(categoryId) ??
+                       throw new NotFoundException(nameof(Book), categoryId);
+
+        if (book.Categories != null)
+        {
+            var bookCategory = book.Categories.Single(c => c.CategoryId == category.Id);
+            await UnitOfWork.BookCategoryRepository.Delete(bookCategory);
+            await UnitOfWork.SaveChangesAsync();
+
+        } 
     }
 }

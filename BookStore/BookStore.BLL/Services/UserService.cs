@@ -3,6 +3,7 @@ using BookStore.BLL.DTOs.Cart;
 using BookStore.BLL.DTOs.User;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
+using BookStore.DAL.Specifications.Users;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -27,11 +28,23 @@ public class UserService: BaseService
         return Mapper.Map<UserDto>(user);
     }
     
+    public async Task<UserDto> Login(NewUserDto userDto)
+    {
+        var user = (await UnitOfWork.UserRepository.GetAll(new UserNameSpecification(userDto.Name))).FirstOrDefault() ??
+                   throw new NotFoundException($"User with name {userDto.Name} is not found");
+
+        if (!BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
+            throw new ArgumentException("Invalid password");
+
+        return Mapper.Map<UserDto>(user);
+    }
+    
     public async Task<UserDto> Create(NewUserDto user)
     {
         var userEntity = Mapper.Map<User>(user);
-        await UnitOfWork.UserRepository.Add(userEntity);
+        userEntity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
+        await UnitOfWork.UserRepository.Add(userEntity);
         await UnitOfWork.SaveChangesAsync();
 
         return Mapper.Map<UserDto>(userEntity);

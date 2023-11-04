@@ -29,10 +29,16 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("register")]
-    public async Task<ActionResult<UserDto>> Create([FromBody] NewUserDto user)
+    public async Task<ActionResult<UserDto>> Register([FromBody] NewUserDto user)
     {
-        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
         return Ok(await _userService.Create(user));
+    }
+    
+    [HttpPost]
+    [Route("login")]
+    public async Task<ActionResult<UserDto>> Login([FromBody] NewUserDto userDto)
+    {
+        return Ok(await _userService.Login(userDto));
     }
 
     [HttpPut]

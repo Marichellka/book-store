@@ -2,6 +2,7 @@
 using BookStore.BLL.DTOs.Cart;
 using BookStore.BLL.DTOs.User;
 using BookStore.BLL.Exceptions;
+using BookStore.BLL.Jwt;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications.Users;
 using BookStore.DAL.UnitOfWork;
@@ -10,8 +11,10 @@ namespace BookStore.BLL.Services;
 
 public class UserService: BaseService
 {
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+    private JwtGenerator _jwtGenerator;
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, JwtGenerator jwtGenerator) : base(unitOfWork, mapper)
     {
+        _jwtGenerator = jwtGenerator;
     }
     
     public async Task<ICollection<UserDto>> GetAll()
@@ -28,7 +31,7 @@ public class UserService: BaseService
         return Mapper.Map<UserDto>(user);
     }
     
-    public async Task<UserDto> Login(NewUserDto userDto)
+    public async Task<string> Login(NewUserDto userDto)
     {
         var user = (await UnitOfWork.UserRepository.GetAll(new UserNameSpecification(userDto.Name))).FirstOrDefault() ??
                    throw new NotFoundException($"User with name {userDto.Name} is not found");
@@ -36,7 +39,9 @@ public class UserService: BaseService
         if (!BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
             throw new ArgumentException("Invalid password");
 
-        return Mapper.Map<UserDto>(user);
+        var jwt = _jwtGenerator.GenerateToken(user);
+
+        return jwt;
     }
     
     public async Task<UserDto> Create(NewUserDto user)

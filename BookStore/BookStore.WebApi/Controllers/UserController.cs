@@ -36,7 +36,7 @@ public class UserController : ControllerBase
     
     [HttpPost]
     [Route("login")]
-    public async Task<ActionResult<UserDto>> Login([FromBody] NewUserDto userDto)
+    public async Task<IActionResult> Login([FromBody] NewUserDto userDto)
     {
         return Ok(await _userService.Login(userDto));
     }

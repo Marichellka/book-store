@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using BookStore.BLL.Jwt;
 using BookStore.BLL.MappingProfiles;
 using BookStore.BLL.Services;
 using BookStore.DAL.Contexts;
@@ -18,6 +19,7 @@ public static class ServiceExtensions
         services.AddScoped<OrderService>();
         services.AddScoped<ReviewService>();
         services.AddScoped<CategoryService>();
+        services.AddScoped<JwtGenerator>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<AppDbContext>();

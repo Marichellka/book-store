@@ -1,7 +1,11 @@
+using System.Text;
+using BookStore.BLL.Jwt;
 using BookStore.DAL.Contexts;
 using BookStore.WebApi.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -25,7 +29,25 @@ public class Program
 
         
         builder.Services.RegisterServices();
-        builder.Services.ConfigureServices(); ;
+        builder.Services.ConfigureServices(); 
+        
+        builder.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(x =>
+            {
+                x.TokenValidationParameters = new()
+                {
+                    ValidIssuer = builder.Configuration[IdentityConstants.CONFIG_SECTION_ISSUER],
+                    ValidAudience = builder.Configuration[IdentityConstants.CONFIG_SECTION_AUDIENCE],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration[IdentityConstants.CONFIG_SECTION_KEY]!)),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true
+                };
+            });
+
+        builder.Services.AddAuthorization();
 
         var app = builder.Build();
 

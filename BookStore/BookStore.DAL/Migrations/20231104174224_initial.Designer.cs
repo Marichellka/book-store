@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231101105200_initial")]
+    [Migration("20231104174224_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -297,6 +297,9 @@ namespace BookStore.DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -1,10 +1,13 @@
-﻿namespace BookStore.BLL.DTOs.User;
+﻿using BookStore.DAL.Models;
+
+namespace BookStore.BLL.DTOs.User;
 
 public class UserDto: BaseDto
 {
     public string Name { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; } 
+    public UserRole Role { get; set; }
     
     public override bool Equals(object? obj)
     {

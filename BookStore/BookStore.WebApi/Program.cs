@@ -1,7 +1,9 @@
 using BookStore.DAL.Contexts;
 using BookStore.WebApi.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 public class Program
 {
@@ -13,13 +15,13 @@ public class Program
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!));
         builder.Services.AddControllers();
         
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
             c.CustomSchemaIds(type => type.ToString());
             c.SwaggerDoc("v1", new OpenApiInfo{ Title = "BookStore.WebAPI", Version = "v1" });
         });
+        builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigureOptions>();
 
         
         builder.Services.RegisterServices();

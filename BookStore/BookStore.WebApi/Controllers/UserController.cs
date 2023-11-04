@@ -1,5 +1,7 @@
 ﻿using BookStore.BLL.DTOs.User;
 using BookStore.BLL.Services;
+using BookStore.WebApi.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.WebApi.Controllers;
@@ -41,15 +43,23 @@ public class UserController : ControllerBase
         return Ok(await _userService.Login(userDto));
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> Put([FromBody] UserDto user)
     {
+        if (User.GetUserId() != user.Id)
+            return Forbid();
+        
         return Ok(await _userService.Update(user));
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
+        if (User.GetUserId() != id)
+            return Forbid();    
+        
         await _userService.Delete(id);
         return NoContent();
     }

@@ -1,6 +1,8 @@
 ﻿using BookStore.BLL.DTOs.Book;
 using BookStore.BLL.DTOs.Publisher;
 using BookStore.BLL.Services;
+using BookStore.DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.WebApi.Controllers;
@@ -34,18 +36,21 @@ public class PublisherController: ControllerBase
         return Ok(await _publisherService.GetBooks(id));
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPost]
     public async Task<ActionResult<PublisherDto>> Create([FromBody] NewPublisherDto publisher)
     {
         return Ok(await _publisherService.Create(publisher));
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPut]
     public async Task<IActionResult> Put([FromBody] PublisherDto publisher)
     {
         return Ok(await _publisherService.Update(publisher));
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

@@ -23,7 +23,7 @@ public class JwtGenerator
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Name, user.Name),
-            new(ClaimTypes.Role, user.Role.ToString())
+            new(ClaimTypes.Role, nameof(user.Role))
         };
 
         SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_configuration[IdentityConstants.CONFIG_SECTION_KEY]!));

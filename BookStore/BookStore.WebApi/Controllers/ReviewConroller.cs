@@ -3,6 +3,8 @@ using BookStore.BLL.Services;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications;
 using BookStore.DAL.Specifications.Reviews;
+using BookStore.WebApi.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.WebApi.Controllers;
@@ -42,18 +44,27 @@ public class ReviewController: ControllerBase
         return Ok(await _reviewService.GetById(id));
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<ReviewDto>> Create([FromBody] NewReviewDto review)
     {
+        if (User.GetUserId() != review.UserId)
+            return Forbid();
+        
         return Ok(await _reviewService.Create(review));
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> Put([FromBody] ReviewDto review)
     {
+        if (User.GetUserId() != review.UserId)
+            return Forbid();
+        
         return Ok(await _reviewService.Update(review));
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

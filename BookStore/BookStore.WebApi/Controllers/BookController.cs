@@ -4,6 +4,7 @@ using BookStore.BLL.Services;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications;
 using BookStore.DAL.Specifications.Books;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.WebApi.Controllers;
@@ -54,24 +55,28 @@ public class BookController: ControllerBase
         return Ok(await _bookService.GetCategories(id));
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPost]
     public async Task<ActionResult<BookDto>> Create([FromBody] NewBookDto book)
     {
         return Ok(await _bookService.Create(book));
     }
     
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPost("{id}/categories")]
     public async Task<IActionResult> AddCategory(int bookId, [FromBody] CategoryDto category)
     {
         return Ok(await _bookService.AddCategory(bookId, category));
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPut]
     public async Task<IActionResult> Put([FromBody] BookDto book)
     {
         return Ok(await _bookService.Update(book));
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -79,6 +84,7 @@ public class BookController: ControllerBase
         return NoContent();
     }
     
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpDelete("{bookId}/categories/{categoryId}")]
     public async Task<IActionResult> DeleteCategory(int bookId, int categoryId)
     {

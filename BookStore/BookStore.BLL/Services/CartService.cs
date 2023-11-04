@@ -67,7 +67,7 @@ public class CartService: BaseService
         return Mapper.Map<CartItemDto>(cartItem);
     }
     
-    public async Task<CartItemDto> UpdateCartItem(int cartId, int cartItemId, NewCartItemDto cartItemDto)
+    public async Task<CartItemDto> UpdateCartItem(int cartId, int cartItemId, CartItemDto cartItemDto)
     {
         var book = await UnitOfWork.BookRepository.GetById(cartItemDto.BookId) ??
             throw new NotFoundException(nameof(Book), cartItemDto.BookId);

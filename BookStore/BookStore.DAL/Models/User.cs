@@ -18,6 +18,6 @@ public class User: BaseModel
 
 public enum UserRole
 {
+    Admin,
     Customer,
-    Admin
 }

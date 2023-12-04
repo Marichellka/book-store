@@ -19,7 +19,7 @@ public class GenericRepository<TModel>: IRepository<TModel> where TModel : BaseM
         IQueryable<TModel> query = _context.Set<TModel>();
         if (specification != null)
         {
-            query.Where(specification.SpecificationExpression);
+            query = query.Where(specification.SpecificationExpression);
         }
         return query.ToListAsync();
     }

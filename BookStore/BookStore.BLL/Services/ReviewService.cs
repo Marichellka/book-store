@@ -3,6 +3,7 @@ using BookStore.BLL.DTOs.Review;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications;
+using BookStore.DAL.Specifications.Reviews;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -32,10 +33,15 @@ public class ReviewService: BaseService
         if(await UnitOfWork.UserRepository.GetById(review.UserId) is null) 
             throw new NotFoundException(nameof(User), review.UserId);
         
-        if(await UnitOfWork.BookRepository.GetById(review.BookId) is null) 
+        var book = await UnitOfWork.BookRepository.GetById(review.BookId) ??
             throw new NotFoundException(nameof(Book), review.BookId);
         
         var reviewEntity = Mapper.Map<Review>(review);
+
+        var allReviews = await UnitOfWork.ReviewRepository.GetAll(new BookReviewSpecification(book.Id));
+        book.TotalRating = allReviews.Sum(review => review.Rating) / allReviews.Count;
+        
+        await UnitOfWork.BookRepository.Update(book);
         await UnitOfWork.ReviewRepository.Add(reviewEntity);
         await UnitOfWork.SaveChangesAsync();
 

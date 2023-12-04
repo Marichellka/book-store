@@ -23,7 +23,7 @@ public class BookController: ControllerBase
     [HttpGet]
     public async Task<ActionResult<ICollection<BookDto>>> Get(
         [FromQuery] int? authorId, [FromQuery] int? publisherId,
-        [FromQuery] IEnumerable<int>? categories)
+        [FromQuery] IEnumerable<int> categories)
     {
         ISpecification<Book> specification = new TrueSpecification<Book>();
         
@@ -35,7 +35,7 @@ public class BookController: ControllerBase
         {
             specification = new AndSpecification<Book>(specification, new PublisherBooksSpecification(publisherId.Value));
         }
-        if (categories != null)
+        if (categories.Any())
         {
             specification = new AndSpecification<Book>(specification, new BooksOfCategoriesSpecification(categories));
         }

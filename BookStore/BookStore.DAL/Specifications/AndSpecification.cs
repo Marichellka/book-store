@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using BookStore.DAL.Models;
+using AutoMapper.Execution;
 
 namespace BookStore.DAL.Specifications;
 
@@ -17,8 +18,14 @@ public class AndSpecification<TModel>: ISpecification<TModel> where TModel : Bas
     public Expression<Func<TModel, bool>> SpecificationExpression => And(_lhs.SpecificationExpression, _rhs.SpecificationExpression);
     private static Expression<Func<TModel, bool>> And(Expression<Func<TModel, bool>> e1, Expression<Func<TModel, bool>> e2)
     {
-        var body = Expression.AndAlso(e1.Body, e2.Body);
-        return Expression.Lambda<Func<TModel, bool>>(body, e1.Parameters[0]);
+        ParameterExpression parameter = Expression.Parameter(typeof(TModel));
+
+        var body1 = e1.ReplaceParameters(parameter);
+        var body2 = e2.ReplaceParameters(parameter);
+
+        BinaryExpression andExpression = Expression.AndAlso(body1, body2);
+
+        return Expression.Lambda<Func<TModel, bool>>(andExpression, parameter);
     }
 
 }

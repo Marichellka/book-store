@@ -48,6 +48,7 @@ public class UserService: BaseService
     {
         var userEntity = Mapper.Map<User>(user);
         userEntity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        userEntity.Role = UserRole.Customer;
 
         await UnitOfWork.UserRepository.Add(userEntity);
         await UnitOfWork.SaveChangesAsync();

@@ -3,6 +3,7 @@ using BookStore.BLL.DTOs.Order;
 using BookStore.BLL.Exceptions;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications;
+using BookStore.DAL.Specifications.Cart;
 using BookStore.DAL.UnitOfWork;
 
 namespace BookStore.BLL.Services;
@@ -38,7 +39,9 @@ public class OrderService: BaseService
         var user = await UnitOfWork.UserRepository.GetById(order.UserId) ?? 
                    throw new NotFoundException(nameof(User), order.UserId);
 
-        var cart = user.Cart ?? throw new NotFoundException($"No Cart Found for User ({user.Id})");
+        var cart = (await UnitOfWork.CartRepository.GetAll(new UserCartSpecification(user.Id))).FirstOrDefault() ?? 
+                   throw new NotFoundException($"No Cart found for User ({user.Id})");
+        
         var orderEntity = Mapper.Map<Order>(order);
         orderEntity.TotalPrice = cart.TotalPrice;
         orderEntity.OrderDateTime = DateTime.Now;
@@ -47,13 +50,14 @@ public class OrderService: BaseService
         await UnitOfWork.OrderRepository.Add(orderEntity);
         await UnitOfWork.SaveChangesAsync();
 
-        var items = Mapper.Map<ICollection<OrderItem>>(cart.CartItems);
-        foreach (var item in items)
+        var cartItems = await UnitOfWork.CartItemRepository.GetAll(new CartItemsSpecification(cart.Id));
+        foreach (var cartItem in cartItems)
         {
-            var book = await UnitOfWork.BookRepository.GetById(item.BookId) ??
-                       throw new NotFoundException(nameof(Book), item.BookId);
+            var book = await UnitOfWork.BookRepository.GetById(cartItem.BookId) ??
+                       throw new NotFoundException(nameof(Book), cartItem.BookId);
             await UnitOfWork.BookRepository.Update(book);
-            
+
+            var item = Mapper.Map<OrderItem>(cartItem);
             item.OrderId = orderEntity.Id;
             await UnitOfWork.OrderItemRepository.Add(item);
         }

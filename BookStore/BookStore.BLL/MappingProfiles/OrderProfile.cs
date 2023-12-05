@@ -14,5 +14,6 @@ public class OrderProfile : Profile
         CreateMap<NewOrderDto, OrderDto>();
         CreateMap<OrderItem, OrderItemDto>();
         CreateMap<CartItemDto, OrderItemDto>();
+        CreateMap<CartItem, OrderItem>().ForMember(x => x.Id, opt => opt.Ignore());
     }
 }

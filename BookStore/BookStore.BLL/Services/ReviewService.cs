@@ -37,12 +37,12 @@ public class ReviewService: BaseService
             throw new NotFoundException(nameof(Book), review.BookId);
         
         var reviewEntity = Mapper.Map<Review>(review);
-
-        var allReviews = await UnitOfWork.ReviewRepository.GetAll(new BookReviewSpecification(book.Id));
-        book.TotalRating = allReviews.Sum(review => review.Rating) / allReviews.Count;
         
-        await UnitOfWork.BookRepository.Update(book);
+        var allReviews = await UnitOfWork.ReviewRepository.GetAll(new BookReviewSpecification(book.Id));
+        book.TotalRating = (allReviews.Sum(review => review.Rating) + review.Rating) / (allReviews.Count+1);
+        
         await UnitOfWork.ReviewRepository.Add(reviewEntity);
+        await UnitOfWork.BookRepository.Update(book);
         await UnitOfWork.SaveChangesAsync();
 
         return Mapper.Map<ReviewDto>(reviewEntity);
@@ -55,6 +55,14 @@ public class ReviewService: BaseService
 
         await UnitOfWork.ReviewRepository.Update(Mapper.Map<Review>(updatedReview));
         await UnitOfWork.SaveChangesAsync();
+        
+        var book = await UnitOfWork.BookRepository.GetById(updatedReview.BookId) ??
+                   throw new NotFoundException(nameof(Book), updatedReview.BookId);
+        
+        var allReviews = await UnitOfWork.ReviewRepository.GetAll(new BookReviewSpecification(book.Id));
+        book.TotalRating = allReviews.Sum(review => review.Rating) / allReviews.Count;
+        await UnitOfWork.BookRepository.Update(book);
+        await UnitOfWork.SaveChangesAsync();
 
         return updatedReview;
     }
@@ -65,6 +73,14 @@ public class ReviewService: BaseService
                      throw new NotFoundException(nameof(Review), id);
 
         await UnitOfWork.ReviewRepository.Delete(review);
+        await UnitOfWork.SaveChangesAsync();
+        
+        var book = await UnitOfWork.BookRepository.GetById(review.BookId) ??
+                   throw new NotFoundException(nameof(Book), review.BookId);
+        
+        var allReviews = await UnitOfWork.ReviewRepository.GetAll(new BookReviewSpecification(book.Id));
+        book.TotalRating = allReviews.Sum(review => review.Rating) / allReviews.Count;
+        await UnitOfWork.BookRepository.Update(book);
         await UnitOfWork.SaveChangesAsync();
     }
 }

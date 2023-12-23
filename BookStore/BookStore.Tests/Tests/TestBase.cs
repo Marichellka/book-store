@@ -101,4 +101,17 @@ public class TestBase
         _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
         return joint;
     }
+
+    protected User CreateUser(string name, string email, string password)
+    {
+        var user = new User()
+        {
+            Name = name,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+            Email = email
+        };
+        _unitOfWork.UserRepository.Add(user).GetAwaiter().GetResult();
+        _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+        return user;
+    }
 }

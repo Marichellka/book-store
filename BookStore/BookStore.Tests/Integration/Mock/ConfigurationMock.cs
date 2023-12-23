@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 
-namespace BookStore.Tests;
+namespace BookStore.Tests.Integration.Mock;
 
 public class ConfigurationMock : IConfiguration
 {

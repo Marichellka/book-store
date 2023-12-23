@@ -1,20 +1,15 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using AutoMapper;
 using BookStore.BLL.DTOs.User;
 using BookStore.BLL.Exceptions;
 using BookStore.BLL.Jwt;
-using BookStore.BLL.MappingProfiles;
 using BookStore.BLL.Services;
-using BookStore.DAL.Contexts;
 using BookStore.DAL.Models;
-using BookStore.DAL.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using BookStore.Tests.Integration.Mock;
 
-namespace BookStore.Tests.Tests;
+namespace BookStore.Tests.Integration;
 
-public class UserTests: TestBase
+public class UserServiceTests: ServiceTestBase
 {
     private  UserService _userService;
     private JwtGenerator _jwtGenerator;

@@ -1,11 +1,11 @@
-﻿using BookStore.BLL.DTOs.Publisher;
-using BookStore.BLL.DTOs.Book;
+﻿using BookStore.BLL.DTOs.Book;
+using BookStore.BLL.DTOs.Publisher;
 using BookStore.BLL.Exceptions;
 using BookStore.BLL.Services;
 
-namespace BookStore.Tests.Tests;
+namespace BookStore.Tests.Integration;
 
-public class PublisherTests: TestBase
+public class PublisherServiceTests: ServiceTestBase
 {
     private PublisherService _publisherService;
 

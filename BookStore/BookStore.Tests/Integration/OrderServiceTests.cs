@@ -4,9 +4,9 @@ using BookStore.BLL.Services;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications.Orders;
 
-namespace BookStore.Tests.Tests;
+namespace BookStore.Tests.Integration;
 
-public class OrderTests: TestBase
+public class OrderServiceTests: ServiceTestBase
 {
     private  OrderService _orderService;
     

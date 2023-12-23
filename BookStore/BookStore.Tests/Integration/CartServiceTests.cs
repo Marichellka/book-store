@@ -1,13 +1,11 @@
-﻿using BookStore.BLL.DTOs.Book;
-using BookStore.BLL.DTOs.Cart;
+﻿using BookStore.BLL.DTOs.Cart;
 using BookStore.BLL.Exceptions;
 using BookStore.BLL.Services;
-using BookStore.DAL.Models;
 using BookStore.DAL.Specifications.Cart;
 
-namespace BookStore.Tests.Tests;
+namespace BookStore.Tests.Integration;
 
-public class CartTests: TestBase
+public class CartServiceTests: ServiceTestBase
 {
     private  CartService _cartService;
     

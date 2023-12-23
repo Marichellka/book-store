@@ -3,9 +3,9 @@ using BookStore.BLL.DTOs.Book;
 using BookStore.BLL.Exceptions;
 using BookStore.BLL.Services;
 
-namespace BookStore.Tests.Tests;
+namespace BookStore.Tests.Integration;
 
-public class AuthorTests: TestBase
+public class AuthorServiceTests: ServiceTestBase
 {
     private  AuthorService _authorService;
     

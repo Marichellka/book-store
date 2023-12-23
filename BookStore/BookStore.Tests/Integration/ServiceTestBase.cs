@@ -3,14 +3,15 @@ using BookStore.BLL.MappingProfiles;
 using BookStore.DAL.Contexts;
 using BookStore.DAL.Models;
 using BookStore.DAL.UnitOfWork;
-using BookStore.Tests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-public class TestBase
+namespace BookStore.Tests.Integration;
+
+public class ServiceTestBase
 {
     protected IUnitOfWork _unitOfWork;
-    protected TestDbContext _context;
+    protected AppDbContext _context;
     protected Mapper _mapper;
     
     [SetUp]
@@ -21,7 +22,7 @@ public class TestBase
         builder.ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning));
         builder.EnableSensitiveDataLogging();
         
-        _context = new TestDbContext(builder.Options);
+        _context = new AppDbContext(builder.Options);
         _unitOfWork = new UnitOfWork(_context);
         
         var configuration = new MapperConfiguration(cfg =>

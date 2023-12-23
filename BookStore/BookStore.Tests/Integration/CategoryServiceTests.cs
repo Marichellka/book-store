@@ -1,18 +1,11 @@
-﻿using AutoMapper;
-using BookStore.BLL.DTOs.Category;
+﻿using BookStore.BLL.DTOs.Category;
 using BookStore.BLL.Exceptions;
-using BookStore.BLL.MappingProfiles;
 using BookStore.BLL.Services;
-using BookStore.DAL.Contexts;
-using BookStore.DAL.Models;
 using BookStore.DAL.Specifications.Books;
-using BookStore.DAL.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BookStore.Tests.Tests;
+namespace BookStore.Tests.Integration;
 
-public class CategoryTests: TestBase
+public class CategoryServiceTests: ServiceTestBase
 {
     private  CategoryService _categoryService;
     

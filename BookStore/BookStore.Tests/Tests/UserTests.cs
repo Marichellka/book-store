@@ -59,13 +59,13 @@ public class UserTests: TestBase
     }
     
     [Test]
-    public void GetById_NonExistingUser_ThrownNotFoundException()
+    public void GetById_UserDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _userService.GetById(1));
     }
 
     [Test]
-    public async Task GetById_ExistingUser_ReturnedUser()
+    public async Task GetById_UserExists_ReturnedUser()
     {
         var user = CreateUser("User", "some@mail.com", "Password");
 
@@ -77,7 +77,7 @@ public class UserTests: TestBase
     }
     
     [Test]
-    public void Login_NonExistingUser_ThrownNotFoundException()
+    public void Login_UserDoesNotExist_ThrownNotFoundException()
     {
         var user = new NewUserDto()
         {
@@ -88,7 +88,7 @@ public class UserTests: TestBase
     }
     
     [Test]
-    public async Task Login_ExistingUser_ReturnedToken()
+    public async Task Login_UserExists_ReturnedToken()
     {
         var user = CreateUser("User", "some@mail.com", "Password");
 
@@ -118,7 +118,7 @@ public class UserTests: TestBase
 
 
     [Test]
-    public void Update_NonExistingUser_ThrownNotFoundException()
+    public void Update_UserDoesNotExist_ThrownNotFoundException()
     {
         UserDto userDto = new UserDto()
         {
@@ -130,7 +130,7 @@ public class UserTests: TestBase
     }
 
     [Test]
-    public async Task Update_ExistingUser_UserUpdated()
+    public async Task Update_UserExists_UserUpdated()
     {
         var user = CreateUser("User", "some@mail.com", "Password");
 
@@ -156,13 +156,13 @@ public class UserTests: TestBase
     }
     
     [Test]
-    public void Delete_NonExistingUser_ThrownNotFoundException()
+    public void Delete_UserDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _userService.Delete(1));
     }
 
     [Test]
-    public async Task Delete_ExistingUser_UserDeleted()
+    public async Task Delete_UserExists_UserDeleted()
     {
         var user = CreateUser("User", "some@mail.com", "Password");
 

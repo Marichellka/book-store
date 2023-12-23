@@ -17,7 +17,7 @@ public class AuthorTests: TestBase
     }
     
     [Test]
-    public async Task GetBooks_NoBooks_ReturnedEmptyList()
+    public async Task GetBooks_NoBooksExist_ReturnedEmptyList()
     {
         var author = CreateAuthor("Author");
         
@@ -27,13 +27,13 @@ public class AuthorTests: TestBase
     }
     
     [Test]
-    public void GetBooks_NonExistingAuthor_ThrownNotFoundException()
+    public void GetBooks_AuthorDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task () => await _authorService.GetBooks(1));
     }
     
     [Test]
-    public async Task GetBooks_WithBooks_ReturnedList()
+    public async Task GetBooks_BooksExist_ReturnedList()
     {
         var author = CreateAuthor("Author");
         var publisher = CreatePublisher("Publisher");
@@ -77,13 +77,13 @@ public class AuthorTests: TestBase
     }
     
     [Test]
-    public void GetById_NonExistingAuthor_ThrownNotFoundException()
+    public void GetById_AuthorDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task () => await _authorService.GetById(1));
     }
     
     [Test]
-    public async Task GetById_ExistingAuthor_ReturnedAuthor()
+    public async Task GetById_AuthorExists_ReturnedAuthor()
     {
         var author = CreateAuthor("Author");
 
@@ -95,7 +95,7 @@ public class AuthorTests: TestBase
     }
     
     [Test]
-    public void Update_NonExistingAuthor_ThrownNotFoundException()
+    public void Update_AuthorDoesNotExist_ThrownNotFoundException()
     {
         AuthorDto authorDto = new AuthorDto()
         {
@@ -107,7 +107,7 @@ public class AuthorTests: TestBase
     }
     
     [Test]
-    public async Task Update_ExistingAuthor_AuthorUpdated()
+    public async Task Update_AuthorExists_AuthorUpdated()
     {
         var author = CreateAuthor("Author");
         
@@ -129,13 +129,13 @@ public class AuthorTests: TestBase
     }
     
     [Test]
-    public void Delete_NonExistingAuthor_ThrownNotFoundException()
+    public void Delete_AuthorDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task () => await _authorService.Delete(1));
     }
     
     [Test]
-    public async Task Delete_ExistingAuthor_AuthorDeleted()
+    public async Task Delete_AuthorExists_AuthorDeleted()
     {
         var author = CreateAuthor("Author");
 

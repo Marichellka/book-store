@@ -27,7 +27,7 @@ public class PublisherTests: TestBase
     }
 
     [Test]
-    public void GetBooks_NonExistingPublisher_ThrownNotFoundException()
+    public void GetBooks_PublisherDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _publisherService.GetBooks(1));
     }
@@ -76,13 +76,13 @@ public class PublisherTests: TestBase
     }
 
     [Test]
-    public void GetById_NonExistingPublisher_ThrownNotFoundException()
+    public void GetById_PublisherDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _publisherService.GetById(1));
     }
 
     [Test]
-    public async Task GetById_ExistingPublisher_ReturnedPublisher()
+    public async Task GetById_PublisherExists_ReturnedPublisher()
     {
         var publisher = CreatePublisher("Publisher");
 
@@ -94,7 +94,7 @@ public class PublisherTests: TestBase
     }
 
     [Test]
-    public void Update_NonExistingPublisher_ThrownNotFoundException()
+    public void Update_PublisherDoesNotExist_ThrownNotFoundException()
     {
         PublisherDto publisherDto = new PublisherDto()
         {
@@ -106,7 +106,7 @@ public class PublisherTests: TestBase
     }
 
     [Test]
-    public async Task Update_ExistingPublisher_PublisherUpdated()
+    public async Task Update_PublisherExists_PublisherUpdated()
     {
         var publisher = CreatePublisher("Publisher");
 
@@ -128,13 +128,13 @@ public class PublisherTests: TestBase
     }
 
     [Test]
-    public void Delete_NonExistingPublisher_ThrownNotFoundException()
+    public void Delete_PublisherDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _publisherService.Delete(1));
     }
 
     [Test]
-    public async Task Delete_ExistingPublisher_PublisherDeleted()
+    public async Task Delete_PublisherExists_PublisherDeleted()
     {
         var publisher = CreatePublisher("Publisher");
 

@@ -67,13 +67,13 @@ public class CategoryTests: TestBase
     }
 
     [Test]
-    public void GetById_NonExistingCategory_ThrownNotFoundException()
+    public void GetById_CategoryDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _categoryService.GetById(1));
     }
 
     [Test]
-    public async Task GetById_ExistingCategory_ReturnedCategory()
+    public async Task GetById_CategoryExists_ReturnedCategory()
     {
         var category = CreateCategory("Category");
 
@@ -85,7 +85,7 @@ public class CategoryTests: TestBase
     }
 
     [Test]
-    public void Update_NonExistingCategory_ThrownNotFoundException()
+    public void Update_CategoryDoesNotExist_ThrownNotFoundException()
     {
         CategoryDto categoryDto = new CategoryDto()
         {
@@ -97,7 +97,7 @@ public class CategoryTests: TestBase
     }
 
     [Test]
-    public async Task Update_ExistingCategory_CategoryUpdated()
+    public async Task Update_CategoryExists_CategoryUpdated()
     {
         var category = CreateCategory("Category");
 
@@ -119,13 +119,13 @@ public class CategoryTests: TestBase
     }
 
     [Test]
-    public void Delete_NonExistingCategory_ThrownNotFoundException()
+    public void Delete_CategoryDoesNotExist_ThrownNotFoundException()
     {
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _categoryService.Delete(1));
     }
 
     [Test]
-    public async Task Delete_ExistingCategory_CategoryDeleted()
+    public async Task Delete_CategoryExists_CategoryDeleted()
     {
         var category = CreateCategory("Category");
 

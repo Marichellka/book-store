@@ -170,4 +170,12 @@ public class UserTests: TestBase
 
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _userService.GetById(user.Id));
     }
+    
+    [Test]
+    public async Task Create_DataCorrect_UserCreated()
+    {
+        await _userService.Create(new NewUserDto() { Name = "User", Password = "Password", Email = "some@mail.com"});
+        
+        Assert.That(_context.Users.Count(), Is.EqualTo(1));
+    }
 }

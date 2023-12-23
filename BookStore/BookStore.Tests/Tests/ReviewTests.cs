@@ -127,4 +127,29 @@ public class ReviewTests: TestBase
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _reviewService.GetById(review.Id));
     }
     
+    [Test]
+    public void Create_UserDoesNotExist_ThrowsNotFound()
+    {
+        Assert.ThrowsAsync<NotFoundException>(async () => await _reviewService.Create(new() { UserId = 42 }));
+    }
+    
+    [Test]
+    public void Create_BookDoesNotExist_ThrowsNotFound()
+    {
+        var user = CreateUser("User", "some@mail.com", "Password");
+
+        Assert.ThrowsAsync<NotFoundException>(async () => await _reviewService.Create(new() { UserId = user.Id, BookId = 42}));
+    }
+    
+    [Test]
+    public async Task Create_DataCorrect_BookCreated()
+    {
+        var user = CreateUser("User", "some@mail.com", "Password");
+        var book = CreateBook("Book", CreateAuthor("author").Id, CreatePublisher("publisher").Id);
+
+        await _reviewService.Create(new NewReviewDto() {UserId = user.Id, BookId = book.Id, Rating = 5});
+        
+        Assert.That(_context.Reviews.Count(), Is.EqualTo(1));
+    }
+    
 }

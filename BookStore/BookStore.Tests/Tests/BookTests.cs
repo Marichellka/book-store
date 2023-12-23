@@ -115,9 +115,9 @@ public class BookTests: TestBase
             Price = 2.1f,
         };
 
-        var returnedCategory = await _bookService.Update(updatedBook);
+        var returnedBook = await _bookService.Update(updatedBook);
 
-        Assert.That(returnedCategory, Is.EqualTo(expectedBook));
+        Assert.That(returnedBook, Is.EqualTo(expectedBook));
     }
     
     [Test]
@@ -215,5 +215,30 @@ public class BookTests: TestBase
         var returned = await _bookService.GetCategories(book.Id);
         
         Assert.That(returned, Is.Empty);
+    }
+    
+    [Test]
+    public void Create_AuthorDoesNotExist_ThrowsNotFound()
+    {
+        Assert.ThrowsAsync<NotFoundException>(async () => await _bookService.Create(new() { AuthorId = 42 }));
+    }
+    
+    [Test]
+    public void Create_PublisherDoesNotExist_ThrowsNotFound()
+    {
+        var publisher = CreatePublisher("publisher");
+        var author = CreateAuthor("author");
+        Assert.ThrowsAsync<NotFoundException>(async () => await _bookService.Create(new() { AuthorId = author.Id, PublisherId = 42}));
+    }
+    
+    [Test]
+    public async Task Create_AllExist_BookCreated()
+    {
+        var publisher = CreatePublisher("publisher");
+        var author = CreateAuthor("author");
+
+        await _bookService.Create(new NewBookDto() { AuthorId = author.Id, PublisherId = publisher.Id, Name = "Book"});
+        
+        Assert.That(_context.Books.Count(), Is.EqualTo(1));
     }
 }

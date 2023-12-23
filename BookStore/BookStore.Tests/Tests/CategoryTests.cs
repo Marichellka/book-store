@@ -133,4 +133,12 @@ public class CategoryTests: TestBase
 
         Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _categoryService.GetById(category.Id));
     }
+    
+    [Test]
+    public async Task Create_DataCorrect_CategoryCreated()
+    {
+        await _categoryService.Create(new NewCategoryDto() { Name = "Category"});
+        
+        Assert.That(_context.Categories.Count(), Is.EqualTo(1));
+    }
 }

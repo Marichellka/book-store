@@ -1,0 +1,130 @@
+﻿using AutoMapper;
+using BookStore.BLL.DTOs.Author;
+using BookStore.BLL.DTOs.Book;
+using BookStore.BLL.DTOs.Publisher;
+using BookStore.BLL.DTOs.Review;
+using BookStore.BLL.Exceptions;
+using BookStore.BLL.MappingProfiles;
+using BookStore.BLL.Services;
+using BookStore.DAL.Contexts;
+using BookStore.DAL.Models;
+using BookStore.DAL.Specifications.Reviews;
+using BookStore.DAL.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using NUnit.Framework.Internal;
+
+namespace BookStore.Tests.Tests;
+
+public class ReviewTests: TestBase
+{
+    private ReviewService _reviewService;
+    
+    [SetUp]
+    public override void SetUp()
+    {
+        base.SetUp();
+        _reviewService = new ReviewService(_unitOfWork, _mapper);
+    }
+    
+    [Test]
+    public async Task GetAll_EmptyDB_ReturnedEmptyList()
+    {
+        var returnedList = await _reviewService.GetAll();
+
+        Assert.IsEmpty(returnedList);
+    }
+    
+    [Test]
+    public async Task GetAll_BooksReviews_ReturnedFilteredList()
+    {
+        var book1 = CreateBook("Book1", CreateAuthor("author").Id, CreatePublisher("publisher").Id);
+        var book2 = CreateBook("Book2", CreateAuthor("author").Id, CreatePublisher("publisher").Id);
+
+        var review = CreateReview(book1.Id, 3.5f);
+        CreateReview(book2.Id, 3.5f);
+
+        var expectedList = new List<ReviewDto>()
+        {
+            _mapper.Map<ReviewDto>(review)
+        };
+
+        var returnedList = await _reviewService.GetAll(new BookReviewSpecification(book1.Id));
+
+        Assert.That(returnedList, Is.EqualTo(expectedList));
+    }
+
+    [Test]
+    public void GetById_ReviewDoesNotExist_ThrowsNotFound()
+    {
+        Assert.ThrowsAsync<NotFoundException>(async () => await _reviewService.GetById(42));
+    }
+
+    [Test]
+    public async Task GetById_ReviewExists_ReturnsReview()
+    {
+        var book = CreateBook("Book", CreateAuthor("author").Id, CreatePublisher("publisher").Id);
+        var review = CreateReview(book.Id, 3.5f);
+
+        var expected = _mapper.Map<ReviewDto>(review);
+
+        var returned = await _reviewService.GetById(review.Id);
+        
+        Assert.That(returned, Is.EqualTo(expected));
+    }
+    
+    [Test]
+    public void Update_ReviewDoesNotExist_ThrownNotFoundException()
+    {
+        ReviewDto categoryDto = new ReviewDto()
+        {
+            Id = 1,
+        };
+
+        Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _reviewService.Update(categoryDto));
+    }
+    
+    [Test]
+    public async Task Update_ReviewExists_ReviewUpdated()
+    {
+        var book = CreateBook("Book", CreateAuthor("author").Id, CreatePublisher("publisher").Id);
+        var review = CreateReview(book.Id, 3.5f);
+
+
+        ReviewDto updated = new ReviewDto()
+        {
+            Id = review.Id,
+            Rating = 5,
+            TextReview = "great"
+        };
+
+        var expected = new ReviewDto()
+        {
+            Id = review.Id,
+            Rating = 5,
+            TextReview = "great"
+        };
+
+        var returnedCategory = await _reviewService.Update(updated);
+
+        Assert.That(returnedCategory, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Delete_ReviewDoesNotExist_ThrownNotFoundException()
+    {
+        Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _reviewService.Delete(45));
+    }
+
+    [Test]
+    public async Task Delete_ReviewExists_ReviewDeleted()
+    {
+        var book = CreateBook("Book", CreateAuthor("author").Id, CreatePublisher("publisher").Id);
+        var review = CreateReview(book.Id, 3.5f);
+
+        await _reviewService.Delete(review.Id);
+
+        Assert.ThrowsAsync(typeof(NotFoundException), async Task() => await _reviewService.GetById(review.Id));
+    }
+    
+}

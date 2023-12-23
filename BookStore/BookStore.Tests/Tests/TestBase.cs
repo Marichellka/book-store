@@ -114,4 +114,17 @@ public class TestBase
         _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
         return user;
     }
+
+    protected Review CreateReview(int bookId, float rating, string textReview="")
+    {
+        var review = new Review()
+        {
+            BookId = bookId,
+            Rating = rating,
+            TextReview = textReview 
+        };
+        _unitOfWork.ReviewRepository.Add(review).GetAwaiter().GetResult();
+        _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+        return review;
+    }
 }

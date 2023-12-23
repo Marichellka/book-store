@@ -78,17 +78,27 @@ public class TestBase
         _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
         return book;
     }
-    
-    // private ReviewDto CreateReview(int userId, int bookId, float rating = 0, string text = "")
-    // {
-    //     NewReviewDto review = new()
-    //     {
-    //         UserId = userId,
-    //         BookId = bookId,
-    //         Rating = rating,
-    //         TextReview = text
-    //     };
-    //     
-    //     
-    // }
+
+    protected Category CreateCategory(string name)
+    {
+        Category category = new Category()
+        {
+            Name = name
+        };
+        _unitOfWork.CategoryRepository.Add(category).GetAwaiter().GetResult();
+        _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+        return category;
+    }
+
+    protected BookCategory JoinBookCategory(int bookId, int categoryId)
+    {
+        var joint = new BookCategory()
+        {
+            BookId = bookId,
+            CategoryId = categoryId,
+        };
+        _unitOfWork.BookCategoryRepository.Add(joint).GetAwaiter().GetResult();
+        _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+        return joint;
+    }
 }

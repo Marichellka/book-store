@@ -152,4 +152,32 @@ public class TestBase
         _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
         return cartItem;
     }
+
+    protected Order CreateOrder(int userId, string address = "", OrderState orderState = OrderState.Processing, DateTime? orderTime = default)
+    {
+        var order = new Order()
+        {
+            UserId = userId,
+            Address = address,
+            OrderState = orderState,
+            OrderDateTime = orderTime ?? DateTime.Now
+        };
+        _unitOfWork.OrderRepository.Add(order).GetAwaiter().GetResult();
+        _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+        return order;
+    }
+    
+    protected OrderItem CreateOrderItem(int orderId, Book book, int count)
+    {
+        var orderItem = new OrderItem()
+        {
+            OrderId = orderId,
+            BookId = book.Id,
+            Count = count,
+            Price = book.Price*count
+        };
+        _unitOfWork.OrderItemRepository.Add(orderItem).GetAwaiter().GetResult();
+        _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+        return orderItem;
+    }
 }

@@ -6,7 +6,7 @@ using BookStore.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BookStore.Tests.Integration;
+namespace BookStore.Tests.Services;
 
 public class ServiceTestBase
 {

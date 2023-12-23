@@ -6,7 +6,7 @@ using BookStore.DAL.Models;
 using BookStore.DAL.Specifications;
 using BookStore.DAL.Specifications.Books;
 
-namespace BookStore.Tests.Integration;
+namespace BookStore.Tests.Services;
 
 public class BookServiceTests: ServiceTestBase
 {

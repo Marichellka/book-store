@@ -3,7 +3,7 @@ using BookStore.BLL.Exceptions;
 using BookStore.BLL.Services;
 using BookStore.DAL.Specifications.Cart;
 
-namespace BookStore.Tests.Integration;
+namespace BookStore.Tests.Services;
 
 public class CartServiceTests: ServiceTestBase
 {

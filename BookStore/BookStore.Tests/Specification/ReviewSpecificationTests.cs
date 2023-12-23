@@ -1,7 +1,7 @@
 ﻿using BookStore.DAL.Models;
 using BookStore.DAL.Specifications.Reviews;
 
-namespace BookStore.Tests.Unit;
+namespace BookStore.Tests.Specification;
 
 public class ReviewSpecificationTests : SpecificationTestBase
 {

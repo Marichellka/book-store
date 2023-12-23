@@ -3,7 +3,7 @@ using BookStore.BLL.DTOs.Book;
 using BookStore.BLL.Exceptions;
 using BookStore.BLL.Services;
 
-namespace BookStore.Tests.Integration;
+namespace BookStore.Tests.Services;
 
 public class AuthorServiceTests: ServiceTestBase
 {

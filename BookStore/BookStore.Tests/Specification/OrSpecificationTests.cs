@@ -1,9 +1,9 @@
 ﻿using BookStore.DAL.Models;
 using BookStore.DAL.Specifications;
 
-namespace BookStore.Tests.Unit;
+namespace BookStore.Tests.Specification;
 
-public class AndSpecificationTests: SpecificationTestBase
+public class OrSpecificationTests: SpecificationTestBase
 {
     private ISpecification<BaseModel> _trueSpecification = new TrueSpecification<BaseModel>();
     private ISpecification<BaseModel> _falseSpecification = new FalseSpecification<BaseModel>();
@@ -11,7 +11,7 @@ public class AndSpecificationTests: SpecificationTestBase
     [Test]
     public void TrueAndTrue_Satisfies()
     {
-        AndSpecification<BaseModel> specification = new(_trueSpecification, _trueSpecification);
+        OrSpecification<BaseModel> specification = new(_trueSpecification, _trueSpecification);
 
         bool result = IsSatisfiedBy(specification, new BaseModel());
         
@@ -19,19 +19,19 @@ public class AndSpecificationTests: SpecificationTestBase
     }
 
     [Test]
-    public void TrueAndFalse_DoesNotSatisfy()
+    public void TrueAndFalse_Satisfies()
     {
-        AndSpecification<BaseModel> specification = new(_trueSpecification, _falseSpecification);
+        OrSpecification<BaseModel> specification = new(_trueSpecification, _falseSpecification);
 
         bool result = IsSatisfiedBy(specification, new BaseModel());
         
-        Assert.That(result, Is.False);
+        Assert.That(result, Is.True);
     }
 
     [Test]
     public void FalseAndFalse_DoesNotSatisfy()
     {
-        AndSpecification<BaseModel> specification = new(_falseSpecification, _falseSpecification);
+        OrSpecification<BaseModel> specification = new(_falseSpecification, _falseSpecification);
 
         bool result = IsSatisfiedBy(specification, new BaseModel());
         

@@ -5,9 +5,9 @@ using BookStore.BLL.Exceptions;
 using BookStore.BLL.Jwt;
 using BookStore.BLL.Services;
 using BookStore.DAL.Models;
-using BookStore.Tests.Integration.Mock;
+using BookStore.Tests.Services.Mock;
 
-namespace BookStore.Tests.Integration;
+namespace BookStore.Tests.Services;
 
 public class UserServiceTests: ServiceTestBase
 {

@@ -4,7 +4,7 @@ using BookStore.BLL.Services;
 using BookStore.DAL.Models;
 using BookStore.DAL.Specifications.Orders;
 
-namespace BookStore.Tests.Integration;
+namespace BookStore.Tests.Services;
 
 public class OrderServiceTests: ServiceTestBase
 {

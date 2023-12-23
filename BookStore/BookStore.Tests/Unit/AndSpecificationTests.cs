@@ -15,7 +15,7 @@ public class AndSpecificationTests: SpecificationTestBase
 
         bool result = IsSatisfiedBy(specification, new BaseModel());
         
-        Assert.True(result);
+        Assert.That(result, Is.True);
     }
 
     [Test]
@@ -25,7 +25,7 @@ public class AndSpecificationTests: SpecificationTestBase
 
         bool result = IsSatisfiedBy(specification, new BaseModel());
         
-        Assert.False(result);
+        Assert.That(result, Is.False);
     }
 
     [Test]
@@ -35,6 +35,6 @@ public class AndSpecificationTests: SpecificationTestBase
 
         bool result = IsSatisfiedBy(specification, new BaseModel());
         
-        Assert.False(result);
+        Assert.That(result, Is.False);
     }
 }

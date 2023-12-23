@@ -127,4 +127,29 @@ public class TestBase
         _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
         return review;
     }
+
+    protected Cart CreateCart(int userId)
+    {
+        var cart = new Cart()
+        {
+            UserId = userId
+        };
+        _unitOfWork.CartRepository.Add(cart).GetAwaiter().GetResult();
+        _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+        return cart;
+    }
+    
+    protected CartItem CreateCartItem(int cartId, Book book, int count)
+    {
+        var cartItem = new CartItem()
+        {
+            CartId = cartId,
+            BookId = book.Id,
+            Count = count,
+            Price = book.Price*count
+        };
+        _unitOfWork.CartItemRepository.Add(cartItem).GetAwaiter().GetResult();
+        _unitOfWork.SaveChangesAsync().GetAwaiter().GetResult();
+        return cartItem;
+    }
 }
